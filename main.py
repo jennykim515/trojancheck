@@ -24,7 +24,7 @@ from selenium.webdriver.support import expected_conditions as EC
 #################################################################################################
 
 
-def job():
+def job(u, p):
     # TODO: specify path to chromedriver in same folder
     driver = webdriver.Chrome(executable_path='')
 
@@ -41,15 +41,12 @@ def job():
     username.clear()
 
     # TODO: set username
-    username.send_keys("tommy trojan")
+    username.send_keys(u)
     WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="username"]')))
 
     password = driver.find_element_by_id('password')
     password.clear()
-    # my_password = input("Enter your password")
-    # TODO: set password below or log in each time (uncomment line 31)
-    my_password = 'mypassword'
-    password.send_keys(my_password)
+    password.send_keys(p)
     driver.find_element_by_name("_eventId_proceed").click()
 
     # try checking all boxes
@@ -97,9 +94,63 @@ def job():
         print("Trojan Check already complete or error with completing trojan check")
     finally:
         # TODO: set output to pathname of folder where you want saved image
-        driver.save_screenshot("")
+        barcode = driver.find_element_by_xpath("/html/body/app-root/app-dashboard/main/div/section[1]/div/div[2]")
+        barcode.screenshot('')
     # close driver
     driver.close()
 
 
-job()
+
+# automated email sending with image attachment
+def send_email(receiver_email, u, p):
+    job(u, p)
+    subject = "Trojan Check"
+    body = "Good morning! This is an automated message with your trojan check."
+    sender_email = ""  # robot email - set account to less secure
+    password = ""  
+
+    # Create a multipart message and set headers
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+    message["Bcc"] = receiver_email  # Recommended for mass emails
+
+    # Add body to email
+    message.attach(MIMEText(body, "plain"))
+
+    filename = "trojancheck.png"  # In same directory as script
+
+    # Open PDF file in binary mode
+    with open(filename, "rb") as attachment:
+        # Add file as application/octet-stream
+        # Email client can usually download this automatically as attachment
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(attachment.read())
+
+    # Encode file in ASCII characters to send by email
+    encoders.encode_base64(part)
+
+    # Add header as key/value pair to attachment part
+    part.add_header(
+        "Content-Disposition",
+        f"attachment; filename= {filename}",
+    )
+
+    # Add attachment to message and convert message to string
+    message.attach(part)
+    text = message.as_string()
+
+    # Log in to server using secure context and send email
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, text)
+   
+
+def main():
+    # TODO: Define email information
+    receiver_email = ""
+    username = ""
+    password = ""
+    send_email(receiver_email, username, password)
