@@ -86,27 +86,33 @@ def job(u, p):
         checkBox = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="mat-checkbox-1-input"]')))
         ActionChains(driver).move_to_element(checkBox).click(checkBox).perform()
+
         # submit
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable(
             (By.XPATH, '/html/body/app-root/app-assessment-review/main/section/section[11]/button'))).click()
+        barcode = driver.find_element_by_xpath("/html/body/app-root/app-assessment-confirmation/main/section[1]")
+        # save screenshot to PATHNAME
+        barcode.screenshot('PATHNAME/trojancheck.png')
     # run when error or already complete
     except:
         print("Trojan Check already complete or error with completing trojan check")
-    finally:
-        # TODO: set output to pathname of folder where you want saved image
+        # save screenshot to PATHNAME
         barcode = driver.find_element_by_xpath("/html/body/app-root/app-dashboard/main/div/section[1]/div/div[2]")
-        barcode.screenshot('')
+        barcode.screenshot('PATHNAME/trojancheck.png')
+
     # close driver
     driver.close()
-
-
 
 # automated email sending with image attachment
 def send_email(receiver_email, u, p):
     job(u, p)
     subject = "Trojan Check"
     body = "Good morning! This is an automated message with your trojan check."
-    sender_email = ""  # robot email - set account to less secure
+    
+    # TODO: create an email that will send trojan check
+    sender_email = ""  
+    
+    # TODO: password for sender email account
     password = ""  
 
     # Create a multipart message and set headers
@@ -151,6 +157,6 @@ def send_email(receiver_email, u, p):
 def main():
     # TODO: Define email information
     receiver_email = ""
-    username = ""
-    password = ""
-    send_email(receiver_email, username, password)
+    username_to_usc = ""
+    password_to_usc = ""
+    send_email(receiver_email, username_to_usc, password_to_usc)
