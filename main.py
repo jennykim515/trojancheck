@@ -51,6 +51,9 @@ def job(u, p):
 
     # try checking all boxes
     try:
+        # full screen
+        driver.fullscreen_window()
+        
         # complete trojan check
         WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable(
