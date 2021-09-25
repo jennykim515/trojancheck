@@ -15,12 +15,6 @@ from selenium.webdriver.support import expected_conditions as EC
 #   3. Install selenium                                                                         #
 #   3. Fill in the to-do's in the job() function                                                #
 #   4. Create a folder to hold image                                                            #
-#   5. To automate using cron, schedule like this (these steps schedules for 6 am)              #
-#       In terminal:                                                                            #
-#       export VISUAL=nano; crontab -e                                                          #
-#        0 6 * * * PYTHONPATH=<path_to_python> python <path_to_main.py>                         #
-#        ^o, enter, ^x                                                                          #
-#                                                                                               #
 #################################################################################################
 
 
