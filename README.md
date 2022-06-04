@@ -28,7 +28,4 @@ Use the link to set up an email that will be sending emails automatically. The s
 ## Run Program    
 Running the program should result in an automated Trojan Check. Check the receiver email's inbox for a screenshot of the barcode and current weather information.
 
-## Future Work
-So far, the Trojan Check only works if manually ran by the user every day. However, cron can be used to automate tasks on a computer so that a program can run at customized times of the day, week, or month. While straightforward for most programs, cron experiences bugs when trying to access the internet and web browser from an asleep computer, which is when we'd want to run the program. 
 
-Once a solution is found, I will update the repository with more information.
